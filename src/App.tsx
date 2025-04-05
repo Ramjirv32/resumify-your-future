@@ -13,6 +13,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import ResumeBuilder from "./pages/ResumeBuilder";
 import ResumePreview from "./pages/ResumePreview";
+import TemplateUpload from "./pages/TemplateUpload";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/resume/create" element={<ResumeBuilder />} />
               <Route path="/resume/preview" element={<ResumePreview />} />
+              <Route path="/resume/upload-template" element={<TemplateUpload />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </ResumeProvider>

@@ -46,6 +46,13 @@ export interface PersonalInfo {
   objective: string;
 }
 
+export interface CustomTemplate {
+  id: string;
+  name: string;
+  description: string;
+  pdfUrl: string;
+}
+
 export interface ResumeData {
   personalInfo: PersonalInfo;
   education: Education[];
@@ -53,6 +60,8 @@ export interface ResumeData {
   skills: Skill[];
   projects: Project[];
   selectedTemplate: string;
+  customTemplates: CustomTemplate[];
+  extractedPdfText?: string;
 }
 
 // Define initial state
@@ -71,6 +80,7 @@ const initialState: ResumeData = {
   skills: [],
   projects: [],
   selectedTemplate: 'professional',
+  customTemplates: [],
 };
 
 // Define action types
@@ -89,6 +99,9 @@ type Action =
   | { type: 'UPDATE_PROJECT'; payload: Project }
   | { type: 'REMOVE_PROJECT'; payload: string }
   | { type: 'SELECT_TEMPLATE'; payload: string }
+  | { type: 'ADD_CUSTOM_TEMPLATE'; payload: CustomTemplate }
+  | { type: 'REMOVE_CUSTOM_TEMPLATE'; payload: string }
+  | { type: 'SET_EXTRACTED_PDF_TEXT'; payload: string }
   | { type: 'CLEAR_RESUME' };
 
 // Create reducer
@@ -173,6 +186,23 @@ const resumeReducer = (state: ResumeData, action: Action): ResumeData => {
       return {
         ...state,
         selectedTemplate: action.payload,
+      };
+    case 'ADD_CUSTOM_TEMPLATE':
+      return {
+        ...state,
+        customTemplates: [...state.customTemplates, action.payload],
+      };
+    case 'REMOVE_CUSTOM_TEMPLATE':
+      return {
+        ...state,
+        customTemplates: state.customTemplates.filter(
+          (template) => template.id !== action.payload
+        ),
+      };
+    case 'SET_EXTRACTED_PDF_TEXT':
+      return {
+        ...state,
+        extractedPdfText: action.payload,
       };
     case 'CLEAR_RESUME':
       return initialState;

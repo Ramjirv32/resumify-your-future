@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { toast } from "@/components/ui/use-toast";
 import { ArrowLeft, Download, Edit } from "lucide-react";
 import ProfessionalTemplate from "@/components/resume-templates/ProfessionalTemplate";
 import ModernTemplate from "@/components/resume-templates/ModernTemplate";
+import CustomPdfTemplate from "@/components/resume-templates/CustomPdfTemplate";
 
 const ResumePreview = () => {
   const { state, getMissingFields } = useResume();
@@ -15,6 +15,9 @@ const ResumePreview = () => {
   const navigate = useNavigate();
   
   const missingFields = getMissingFields();
+  const isCustomTemplate = state.customTemplates?.some(
+    template => template.id === state.selectedTemplate
+  );
 
   const handleEdit = () => {
     navigate("/resume/create");
@@ -48,6 +51,21 @@ const ResumePreview = () => {
   };
 
   const renderTemplate = () => {
+    // Check if it's a custom template
+    if (isCustomTemplate) {
+      const customTemplate = state.customTemplates?.find(
+        template => template.id === state.selectedTemplate
+      );
+      
+      if (customTemplate) {
+        return <CustomPdfTemplate 
+          resume={state} 
+          pdfUrl={customTemplate.pdfUrl} 
+        />;
+      }
+    }
+    
+    // Otherwise render built-in templates
     switch (state.selectedTemplate) {
       case "modern":
         return <ModernTemplate resume={state} />;
